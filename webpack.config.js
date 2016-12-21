@@ -1,5 +1,5 @@
 module.exports = {
-  entry: "./washover.js",
+  entry: "./paintover.js",
   output: {
   	filename: "./bundle.js"
   },

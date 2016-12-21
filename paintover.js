@@ -31,8 +31,18 @@ function clear (element) {
   }
 }
 
+function updateMoves(parent, text)
+{
+    const textNode = document.createTextNode(text);
+    clear(parent);
+    parent.appendChild(textNode);
+}
+
 // Game logic
 
+let moves;
+const maxMoves = 25;
+let filled;
 
 
 function randomColor() {
@@ -66,51 +76,69 @@ function paintNeighbors(row, col, color){
       testColorFlood (row, col - 1, color);
 }
 
-function allFlooded ()
+function allPainted ()
 {
-    for (var row = 0; row < n_rows; row++) {
-        for (var col = 0; col < n_cols; col++) {
-            if (!gameBoard[row][col].painted) {
-                return false;
-            }
-        }
-    }
-    return true;
+  for (let row = 0; row < n_rows; row++) {
+      for (let col = 0; col < n_cols; col++) {
+          if (!gameBoard[row][col].painted) {
+              return false;
+          }
+      }
+  }
+  return true;
 }
 
-function paint (color)
+function paint (color, initial)
 {
-    const prev_color = gameBoard[0][0].color;
-    if (color == prev_color)
-        return;
-    for (let row = 0; row < n_rows; row++) {
-      for (let col = 0; col < n_cols; col++) {
-        if (gameBoard[row][col].painted) {
-          paintElement (row, col, color);
-        }
+  if(filled){
+    return;
+  }
+  const prev_color = gameBoard[0][0].color;
+  if (!initial && color == prev_color)
+      return;
+  moves++;
+  updateMoves(document.getElementById("moves"), moves);
+  for (let row = 0; row < n_rows; row++) {
+    for (let col = 0; col < n_cols; col++) {
+      if (gameBoard[row][col].painted) {
+        paintElement (row, col, color);
       }
     }
-    for (let row = 0; row < n_rows; row++) {
-      for (let col = 0; col < n_cols; col++) {
-        if (gameBoard[row][col].painted) {
-          paintNeighbors (row, col, color);
-        }
+  }
+  for (let row = 0; row < n_rows; row++) {
+    for (let col = 0; col < n_cols; col++) {
+      if (gameBoard[row][col].painted) {
+        paintNeighbors (row, col, color);
       }
     }
+  }
+  if(allPainted()){
+    filled = true;
+    if(moves <= maxMoves){
+      alert ("Congratulations, you win!");
+    } else {
+      alert ("You finished... but you still lost");
+    }
+  } else if(moves === maxMoves){
+    alert ("You've Lost. Better luck next time");
+  }
+
 }
 
-function printE(e) {
+function paintCallback(e) {
   paint(e.currentTarget.className.split(" ").slice(1)[0]);
   console.log(e.currentTarget.className.split(" ").slice(1)[0]);
 }
 
 function createBoard () {
+  moves = -1;
+  filled = false;
   const board = getById("gameBoard");
   for (let row = 0; row < n_rows; row++) {
     const tr = createNode("tr", board);
     for (let col = 0; col < n_cols; col++) {
       const td = createNode("td", tr);
-      td.addEventListener("click", printE);
+      td.addEventListener("click", paintCallback);
       color = randomColor();
       td.className = "square " + color;
       gameBoard[row][col].color = color;
@@ -119,6 +147,9 @@ function createBoard () {
     }
   }
   gameBoard[0][0].painted = true;
+  paint(gameBoard[0][0].color, true);
+  updateMoves(document.getElementById("moves"), moves);
+  updateMoves(document.getElementById("maxMoves"), maxMoves);
 }
 
 function newGame() {
@@ -133,4 +164,6 @@ function newGame() {
 document.addEventListener("DOMContentLoaded", function(){
   window.newGame = newGame;
   createBoard();
+
+  paint(gameBoard[0][0].color);
 });

@@ -2,16 +2,21 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>WashOver</title>
+    <title>PaintOver</title>
     <link rel="stylesheet" type="text/css" href="./washover.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="./bundle.js"></script>
   </head>
 
   <body>
-    <h1>WashOver</h1>
+    <h1>PaintOver</h1>
     <button className="start-button" onClick="newGame()">New Game</button>
     <table id="gameBoard">
     </table>
+    <div>Moves:
+      <span id="moves"></span>
+      /
+      <span id="maxMoves"></span>
+    </div>
   </body>
 </html>
