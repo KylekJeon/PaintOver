@@ -24,6 +24,7 @@ This project will be implemented with the following technologies:
 - CSS for styling, HTML for Event Listeners
 - Webpack to bundle and serve up various scripts
 - Github pages for hosting
+- Tone.js, an audio sequencing library, will be used for the step-sequencing aspect of this game.
 
 In addition to the entry file, there will be various scripts involved in the game logic.
 
@@ -37,7 +38,7 @@ In addition to the entry file, there will be various scripts involved in the gam
 Set up all necessary modules, and flesh out and finish the flood it portion of the game
 
 ### Day 2:
-Download all api and packages necessary for audio sequencing, Implement sequencer on a blank n x n board.
+Download and use Tone.js to implement step sequencer on a blank n x n board.
 
 ### Day 3:
 Mix the audio sequencing with the flood-it board, add functionality featuers such as resets, change board size, and other features.
