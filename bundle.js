@@ -166,7 +166,6 @@
 	
 	function paintCallback(e) {
 	  paint(e.currentTarget.className.split(" ").slice(1)[0]);
-	  console.log(e.currentTarget.className.split(" ").slice(1)[0]);
 	}
 	
 	function createGameBoard(size) {
@@ -216,7 +215,6 @@
 	
 	function updateBoard() {
 	  size = parseInt(document.getElementById("board-size").value);
-	  console.log(size);
 	  newGame(size);
 	}
 	
