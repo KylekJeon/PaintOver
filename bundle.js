@@ -44,63 +44,56 @@
 /* 0 */
 /***/ function(module, exports) {
 
-	const n_rows = 14;
-	const n_cols = 14;
-
-	const gameBoard = new Array (n_rows);
-	for (let row = 0; row < n_rows; row++) {
-	  gameBoard[row] = new Array (n_cols);
-	  for (let col = 0; col < n_cols; col++){
-	    gameBoard[row][col] = {};
-	  }
-	}
-
+	let gameBoard;
+	let n_rows;
+	let n_cols;
+	
 	const colors = "red blue green purple yellow orange".split(/\s+/);
-
-
+	
+	
 	// DOM functions
-
+	
 	function createNode (type, parent) {
 	  const newNode = document.createElement(type);
 	  parent.appendChild (newNode);
 	  return newNode;
 	}
-
+	
 	function getById (id) {
 	  const element = document.getElementById(id);
 	  return element;
 	}
-
+	
 	function clear (element) {
 	  while (element.lastChild) {
 	    element.removeChild (element.lastChild);
 	  }
 	}
-
+	
 	function updateMoves(parent, text)
 	{
 	    const textNode = document.createTextNode(text);
 	    clear(parent);
 	    parent.appendChild(textNode);
 	}
-
+	
 	// Game logic
-
+	
 	let moves;
-	const maxMoves = 25;
+	let maxMoves = 25;
 	let filled;
-
-
+	
+	
 	function randomColor() {
 	  num = Math.floor( Math.random() * 6 );
 	  return colors[num];
 	}
-
+	
 	function paintElement(row, col, color) {
 	  gameBoard[row][col].color = color;
 	  gameBoard[row][col].element.className = "square " + color;
 	}
-
+	
 	function testColorFlood (row, col, color) {
 	  if (gameBoard[row][col].painted){
 	    return;
@@ -110,7 +103,7 @@
 	    paintNeighbors(row, col, color);
 	  }
 	}
-
+	
 	function paintNeighbors(row, col, color){
 	  if (row < n_rows - 1)
 	      testColorFlood (row + 1, col, color);
@@ -121,7 +114,7 @@
 	  if (col > 0)
 	      testColorFlood (row, col - 1, color);
 	}
-
+	
 	function allPainted ()
 	{
 	  for (let row = 0; row < n_rows; row++) {
@@ -133,7 +126,7 @@
 	  }
 	  return true;
 	}
-
+	
 	function paint (color, initial)
 	{
 	  if(filled){
@@ -168,15 +161,31 @@
 	  } else if(moves === maxMoves){
 	    alert ("You've Lost. Better luck next time");
 	  }
-
+	
 	}
-
+	
 	function paintCallback(e) {
 	  paint(e.currentTarget.className.split(" ").slice(1)[0]);
 	  console.log(e.currentTarget.className.split(" ").slice(1)[0]);
 	}
-
-	function createBoard () {
+	
+	function createGameBoard(size) {
+	  n_rows = size;
+	  n_cols = size;
+	  maxMoves = Math.round(1.77 * size);
+	  gameBoard = new Array (n_rows);
+	  for (let row = 0; row < n_rows; row++) {
+	    gameBoard[row] = new Array (n_cols);
+	    for (let col = 0; col < n_cols; col++){
+	      gameBoard[row][col] = {};
+	    }
+	  }
+	
+	}
+	
+	
+	function createBoard (size) {
+	  createGameBoard(size);
 	  moves = -1;
 	  filled = false;
 	  const board = getById("gameBoard");
@@ -197,21 +206,25 @@
 	  updateMoves(document.getElementById("moves"), moves);
 	  updateMoves(document.getElementById("maxMoves"), maxMoves);
 	}
-
-	function newGame() {
+	
+	function newGame(size) {
 	  const board = getById("gameBoard");
 	  clear(board);
-	  createBoard();
+	  createBoard(size);
 	}
-
-
-
-
+	
+	function updateBoard() {
+	  size = parseInt(document.getElementById("board-size").value);
+	  console.log(size);
+	  newGame(size);
+	}
+	
+	
+	
 	document.addEventListener("DOMContentLoaded", function(){
 	  window.newGame = newGame;
-	  createBoard();
-
-	  paint(gameBoard[0][0].color);
+	  window.updateBoard = updateBoard;
+	  updateBoard(14);
 	});
 
 

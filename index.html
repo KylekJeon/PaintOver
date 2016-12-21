@@ -10,7 +10,15 @@
 
   <body>
     <h1>PaintOver</h1>
-    <button className="start-button" onClick="newGame()">New Game</button>
+    <button className="start-button" onclick="newGame()">New Game</button>
+    <select id="board-size" onchange="updateBoard()">
+      <option value="10">10x10</option>
+      <option value="12">12x12</option>
+      <option value="14" selected>14x14</option>
+      <option value="16">16x16</option>
+      <option value="18">18x18</option>
+      <option value="20">20x20</option>
+    </select>
     <table id="gameBoard">
     </table>
     <div>Moves:

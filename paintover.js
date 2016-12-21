@@ -1,13 +1,6 @@
-const n_rows = 14;
-const n_cols = 14;
-
-const gameBoard = new Array (n_rows);
-for (let row = 0; row < n_rows; row++) {
-  gameBoard[row] = new Array (n_cols);
-  for (let col = 0; col < n_cols; col++){
-    gameBoard[row][col] = {};
-  }
-}
+let gameBoard;
+let n_rows;
+let n_cols;
 
 const colors = "red blue green purple yellow orange".split(/\s+/);
 
@@ -41,7 +34,7 @@ function updateMoves(parent, text)
 // Game logic
 
 let moves;
-const maxMoves = 25;
+let maxMoves = 25;
 let filled;
 
 
@@ -130,7 +123,23 @@ function paintCallback(e) {
   console.log(e.currentTarget.className.split(" ").slice(1)[0]);
 }
 
-function createBoard () {
+function createGameBoard(size) {
+  n_rows = size;
+  n_cols = size;
+  maxMoves = Math.round(1.77 * size);
+  gameBoard = new Array (n_rows);
+  for (let row = 0; row < n_rows; row++) {
+    gameBoard[row] = new Array (n_cols);
+    for (let col = 0; col < n_cols; col++){
+      gameBoard[row][col] = {};
+    }
+  }
+
+}
+
+
+function createBoard (size) {
+  createGameBoard(size);
   moves = -1;
   filled = false;
   const board = getById("gameBoard");
@@ -152,18 +161,22 @@ function createBoard () {
   updateMoves(document.getElementById("maxMoves"), maxMoves);
 }
 
-function newGame() {
+function newGame(size) {
   const board = getById("gameBoard");
   clear(board);
-  createBoard();
+  createBoard(size);
 }
 
+function updateBoard() {
+  size = parseInt(document.getElementById("board-size").value);
+  console.log(size);
+  newGame(size);
+}
 
 
 
 document.addEventListener("DOMContentLoaded", function(){
   window.newGame = newGame;
-  createBoard();
-
-  paint(gameBoard[0][0].color);
+  window.updateBoard = updateBoard;
+  updateBoard(14);
 });
