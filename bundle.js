@@ -207,7 +207,8 @@
 	  updateMoves(document.getElementById("maxMoves"), maxMoves);
 	}
 	
-	function newGame(size) {
+	function newGame() {
+	  size = parseInt(document.getElementById("board-size").value);
 	  const board = getById("gameBoard");
 	  clear(board);
 	  createBoard(size);
