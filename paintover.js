@@ -1,3 +1,4 @@
+import Tone from 'tone';
 let gameBoard;
 let n_rows;
 let n_cols;
@@ -39,7 +40,7 @@ let filled;
 
 
 function randomColor() {
-  num = Math.floor( Math.random() * 6 );
+  let num = Math.floor( Math.random() * 6 );
   return colors[num];
 }
 
@@ -120,6 +121,7 @@ function paint (color, initial)
 
 function paintCallback(e) {
   paint(e.currentTarget.className.split(" ").slice(1)[0]);
+
 }
 
 function createGameBoard(size) {
@@ -147,7 +149,7 @@ function createBoard (size) {
     for (let col = 0; col < n_cols; col++) {
       const td = createNode("td", tr);
       td.addEventListener("click", paintCallback);
-      color = randomColor();
+      let color = randomColor();
       td.className = "square " + color;
       gameBoard[row][col].color = color;
       gameBoard[row][col].element = td;
@@ -161,14 +163,14 @@ function createBoard (size) {
 }
 
 function newGame() {
-  size = parseInt(document.getElementById("board-size").value);
+  let size = parseInt(document.getElementById("board-size").value);
   const board = getById("gameBoard");
   clear(board);
   createBoard(size);
 }
 
 function updateBoard() {
-  size = parseInt(document.getElementById("board-size").value);
+  let size = parseInt(document.getElementById("board-size").value);
   newGame(size);
 }
 

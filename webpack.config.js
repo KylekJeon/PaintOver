@@ -1,7 +1,22 @@
 module.exports = {
   entry: "./paintover.js",
   output: {
-  	filename: "./bundle.js"
+    filename: "./bundle.js",
   },
-  devtool: 'source-map',
+  module: {
+    loaders: [
+      {
+        test: [/\.js?$/],
+        exclude: /node_modules/,
+        loader: 'babel',
+        query: {
+          presets: ["es2015"]
+        }
+      }
+    ]
+  },
+  devtool: 'source-maps',
+  resolve: {
+    extensions: ["", ".js"]
+  }
 };
