@@ -161,8 +161,21 @@
 	  }
 	}
 	
+	Array.prototype.randomElement = function () {
+	  return this[Math.floor(Math.random() * this.length)];
+	};
+	
+	var synth = new _tone2.default.Synth().toMaster();
+	var notes = ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"];
+	var i = 0;
+	
 	function paintCallback(e) {
 	  paint(e.currentTarget.className.split(" ").slice(1)[0]);
+	  synth.triggerAttackRelease(notes.randomElement(), "1");
+	  i++;
+	  if (i == 8) {
+	    i = i % 8;
+	  }
 	}
 	
 	function createGameBoard(size) {
