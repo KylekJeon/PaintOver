@@ -23,10 +23,22 @@
     </select>
     <table id="gameBoard">
     </table>
+    <div class"activate-colors">
+      Toggle Colors:
+      <button onclick="activateColor('red')">Red</button>
+      <button onclick="activateColor('blue')">Blue</button>
+      <button onclick="activateColor('green')">Green</button>
+      <button onclick="activateColor('purple')">Purple</button>
+      <button onclick="activateColor('yellow')">Yellow</button>
+      <button onclick="activateColor('orange')">Orange</button>
+    </div>
     <div>Moves:
       <span id="moves"></span>
       /
       <span id="maxMoves"></span>
+    </div>
+    <div>Active Colors:
+      <span id="activeColors"></span>
     </div>
   </body>
 </html>

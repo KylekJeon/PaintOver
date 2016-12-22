@@ -13,28 +13,53 @@
 .gameBoard {
   margin-top: 30px;
 }
+
 .red {
    background-color: red;
+ }
+
+ .red.activated {
+   background-color: rgba(251, 2, 0, .5);
  }
 
 .blue {
    background-color: blue;
  }
 
+.blue.activated {
+   background-color: rgba(0, 0, 254, .5);
+ }
+
  .green {
    background-color: green;
+ }
+
+ .green.activated {
+   background-color: rgba(8, 123, 2, .5);
  }
 
  .purple {
    background-color: purple;
  }
 
+ .purple.activated {
+   background-color: rgba(126, 1, 132, .5);
+ }
+
  .yellow {
-   background-color: yellow;
+   background-color: rgba(255, 255, 0, 1);
+ }
+
+ .yellow.activated {
+   background-color: rgba(225, 225, 0, .7);
  }
 
  .orange {
    background-color: orange;
+ }
+
+ .orange.activated {
+   background-color:rgba(255, 163, 6, .5);
  }
 
 .aquamarine {

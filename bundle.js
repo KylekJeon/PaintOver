@@ -55,8 +55,9 @@
 	var gameBoard = void 0;
 	var n_rows = void 0;
 	var n_cols = void 0;
-	
+	var sequence = void 0;
 	var colors = "red blue green purple yellow orange".split(/\s+/);
+	var activatedColors = [];
 	
 	// DOM functions
 	
@@ -83,6 +84,13 @@
 	  parent.appendChild(textNode);
 	}
 	
+	function updateColors() {
+	  var colors = document.getElementById("activeColors");
+	  clear(colors);
+	  activatedColors.forEach(function (color) {
+	    colors.appendChild(document.createTextNode(color + " "));
+	  });
+	}
 	// Game logic
 	
 	var moves = void 0;
@@ -161,21 +169,35 @@
 	  }
 	}
 	
+	// array functions
+	
 	Array.prototype.randomElement = function () {
 	  return this[Math.floor(Math.random() * this.length)];
 	};
 	
-	var synth = new _tone2.default.Synth().toMaster();
-	var notes = ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"];
-	var i = 0;
+	Array.prototype.transpose = function () {
+	  var returnArray = new Array(this.length);
+	  for (var i = 0; i < this.length; i++) {
+	    returnArray[i] = new Array(this.length);
+	    for (var j = 0; j < this.length; j++) {
+	      returnArray[i][j] = this[j][i];
+	    }
+	  }
+	  return returnArray;
+	};
+	
+	function rangeArray(num) {
+	  var rangeArray = [];
+	  for (var i = 0; i < num; i++) {
+	    rangeArray.push(i);
+	  }
+	  return rangeArray;
+	}
 	
 	function paintCallback(e) {
-	  paint(e.currentTarget.className.split(" ").slice(1)[0]);
-	  synth.triggerAttackRelease(notes.randomElement(), "1");
-	  i++;
-	  if (i == 8) {
-	    i = i % 8;
-	  }
+	  var color = e.currentTarget.className.split(" ").slice(1)[0];
+	  paint(color);
+	  toggleSquares();
 	}
 	
 	function createGameBoard(size) {
@@ -206,6 +228,7 @@
 	      gameBoard[row][col].color = color;
 	      gameBoard[row][col].element = td;
 	      gameBoard[row][col].painted = false;
+	      gameBoard[row][col].activated = false;
 	    }
 	  }
 	  gameBoard[0][0].painted = true;
@@ -214,21 +237,76 @@
 	  updateMoves(document.getElementById("maxMoves"), maxMoves);
 	}
 	
+	var synth = new _tone2.default.PolySynth(6, _tone2.default.Synth).toMaster();
+	var notes = ["C3", "E3", "G3", "A3", "C4", "D4", "E4", "G4", "A4", "C5"];
+	
 	function newGame() {
+	  if (sequence) {
+	    sequence.stop();
+	  }
 	  var size = parseInt(document.getElementById("board-size").value);
 	  var board = getById("gameBoard");
 	  clear(board);
 	  createBoard(size);
+	  var transposeBoard = gameBoard.transpose();
+	  sequence = new _tone2.default.Sequence(function (time, col) {
+	    var _loop = function _loop(row) {
+	      if (gameBoard[row][col].activated) {
+	        (function () {
+	          var className = gameBoard[row][col].element.className;
+	          gameBoard[row][col].element.className = className + " activated";
+	          synth.triggerAttackRelease(notes.randomElement(), "4n");
+	          window.setTimeout(function () {
+	            gameBoard[row][col].element.className = className;
+	          }, 500);
+	        })();
+	      }
+	    };
+	
+	    for (var row = 0; row < n_rows; row++) {
+	      _loop(row);
+	    }
+	  }, rangeArray(size), "4n");
+	  _tone2.default.Transport.start();
+	  sequence.start();
 	}
 	
 	function updateBoard() {
 	  var size = parseInt(document.getElementById("board-size").value);
 	  newGame(size);
+	  while (activatedColors.length > 0) {
+	    activatedColors.pop();
+	  }
+	  updateColors();
+	}
+	
+	function activateColor(color) {
+	  var indexOfColor = activatedColors.indexOf(color);
+	  if (indexOfColor !== -1) {
+	    activatedColors.splice(indexOfColor, 1);
+	  } else {
+	    activatedColors.push(color);
+	  }
+	  toggleSquares();
+	  updateColors();
+	}
+	
+	function toggleSquares() {
+	  for (var i = 0; i < n_rows; i++) {
+	    for (var j = 0; j < n_cols; j++) {
+	      if (activatedColors.includes(gameBoard[i][j].color)) {
+	        gameBoard[i][j].activated = true;
+	      } else {
+	        gameBoard[i][j].activated = false;
+	      }
+	    }
+	  }
 	}
 	
 	document.addEventListener("DOMContentLoaded", function () {
 	  window.newGame = newGame;
 	  window.updateBoard = updateBoard;
+	  window.activateColor = activateColor;
 	  updateBoard(14);
 	});
 
