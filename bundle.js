@@ -58,6 +58,8 @@
 	var sequence = void 0;
 	var colors = "red blue green purple yellow orange".split(/\s+/);
 	var activatedColors = [];
+	var dominantColor = void 0;
+	var secondColor = void 0;
 	
 	// DOM functions
 	
@@ -198,6 +200,34 @@
 	  var color = e.currentTarget.className.split(" ").slice(1)[0];
 	  paint(color);
 	  toggleSquares();
+	  countColors();
+	}
+	
+	function countColors() {
+	  var colorCount = {};
+	  colors.forEach(function (color) {
+	    colorCount[color] = 0;
+	  });
+	  for (var row = 0; row < n_rows; row++) {
+	    for (var col = 0; col < n_cols; col++) {
+	      colorCount[gameBoard[row][col].color] += 1;
+	    }
+	  }
+	  var mostColors = 0;
+	  var secondMost = 0;
+	  for (var prop in colorCount) {
+	    if (colorCount[prop] > secondMost) {
+	      if (colorCount[prop] > mostColors) {
+	        mostColors = colorCount[prop];
+	        dominantColor = prop;
+	      } else {
+	        secondMost = colorCount[prop];
+	        secondColor = prop;
+	      }
+	    }
+	  }
+	  console.log("Most colors: " + dominantColor + ": " + mostColors);
+	  console.log("Second most colors: " + secondColor + ": " + secondMost);
 	}
 	
 	function createGameBoard(size) {
@@ -237,13 +267,18 @@
 	  updateMoves(document.getElementById("maxMoves"), maxMoves);
 	}
 	
-	var synth = new _tone2.default.PolySynth(6, _tone2.default.Synth).toMaster();
+	var synth = new _tone2.default.PolySynth(6, _tone2.default.MonoSynth, {
+	  "oscillator": { "type": "sine" },
+	  envelope: {
+	    attack: 0.1,
+	    decay: 0.4,
+	    sustain: 0.2,
+	    release: 0.4
+	  }
+	}).toMaster();
 	var notes = ["C3", "E3", "G3", "A3", "C4", "D4", "E4", "G4", "A4", "C5"];
 	
 	function newGame() {
-	  if (sequence) {
-	    sequence.stop();
-	  }
 	  var size = parseInt(document.getElementById("board-size").value);
 	  var board = getById("gameBoard");
 	  clear(board);
@@ -267,8 +302,6 @@
 	      _loop(row);
 	    }
 	  }, rangeArray(size), "4n");
-	  _tone2.default.Transport.start();
-	  sequence.start();
 	}
 	
 	function updateBoard() {
@@ -284,11 +317,17 @@
 	  var indexOfColor = activatedColors.indexOf(color);
 	  if (indexOfColor !== -1) {
 	    activatedColors.splice(indexOfColor, 1);
+	    if (activatedColors.length === 0) {
+	      _tone2.default.Transport.stop();
+	      sequence.stop();
+	    }
 	  } else {
 	    activatedColors.push(color);
 	  }
 	  toggleSquares();
 	  updateColors();
+	  _tone2.default.Transport.start();
+	  sequence.start();
 	}
 	
 	function toggleSquares() {

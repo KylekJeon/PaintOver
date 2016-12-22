@@ -5,6 +5,8 @@ let n_cols;
 let sequence;
 const colors = "red blue green purple yellow orange".split(/\s+/);
 let activatedColors = [];
+let dominantColor;
+let secondColor;
 
 // DOM functions
 
@@ -156,7 +158,36 @@ function paintCallback(e) {
   let color = e.currentTarget.className.split(" ").slice(1)[0];
   paint(color);
   toggleSquares();
+  countColors();
 }
+
+function countColors(){
+  const colorCount = {};
+  colors.forEach((color) => {
+    colorCount[color] = 0;
+  });
+  for (let row = 0; row < n_rows; row++){
+    for (let col = 0; col < n_cols; col++){
+      colorCount[gameBoard[row][col].color] += 1;
+    }
+  }
+  let mostColors = 0;
+  let secondMost = 0;
+  for (let prop in colorCount) {
+    if(colorCount[prop] > secondMost){
+      if(colorCount[prop] > mostColors){
+        mostColors = colorCount[prop];
+        dominantColor = prop;
+      } else {
+        secondMost = colorCount[prop];
+        secondColor = prop;
+      }
+    }
+  }
+  console.log("Most colors: " + dominantColor + ": " + mostColors);
+  console.log("Second most colors: " + secondColor + ": " + secondMost);
+}
+
 
 function createGameBoard(size) {
   n_rows = size;
@@ -197,13 +228,18 @@ function createBoard (size) {
   updateMoves(document.getElementById("maxMoves"), maxMoves);
 }
 
-const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
+const synth = new Tone.PolySynth(6, Tone.MonoSynth, {
+  "oscillator" : { "type" : "sine" },
+  envelope:{
+    attack:0.1,
+    decay:0.4,
+    sustain:0.2,
+    release:0.4,
+}
+}).toMaster();
 const notes = ["C3", "E3", "G3", "A3", "C4", "D4", "E4", "G4", "A4", "C5"];
 
 function newGame() {
-  if(sequence){
-    sequence.stop();
-  }
   let size = parseInt(document.getElementById("board-size").value);
   const board = getById("gameBoard");
   clear(board);
@@ -221,8 +257,6 @@ function newGame() {
       }
     }
   }, rangeArray(size), "4n");
-  Tone.Transport.start();
-  sequence.start();
 }
 
 function updateBoard() {
@@ -238,11 +272,17 @@ function activateColor(color) {
   const indexOfColor = activatedColors.indexOf(color);
   if(indexOfColor !== -1){
     activatedColors.splice(indexOfColor, 1);
+    if (activatedColors.length === 0){
+      Tone.Transport.stop();
+      sequence.stop();
+    }
   } else {
     activatedColors.push(color);
   }
   toggleSquares();
   updateColors();
+  Tone.Transport.start();
+  sequence.start();
 }
 
 function toggleSquares() {
