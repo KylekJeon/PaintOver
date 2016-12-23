@@ -34,13 +34,6 @@ function updateMoves(parent, text)
   parent.appendChild(textNode);
 }
 
-function updateColors(){
-  const colors = document.getElementById("activeColors");
-  clear(colors);
-  activatedColors.forEach( (color) => {
-    colors.appendChild(document.createTextNode(color + " "));
-  });
-}
 // Game logic
 
 let moves;
@@ -228,7 +221,7 @@ function createBoard (size) {
   updateMoves(document.getElementById("maxMoves"), maxMoves);
 }
 
-const synth = new Tone.PolySynth(6, Tone.MonoSynth, {
+const synth = new Tone.PolySynth(18, Tone.MonoSynth, {
   "oscillator" : { "type" : "sine" },
   envelope:{
     attack:0.1,
@@ -238,25 +231,76 @@ const synth = new Tone.PolySynth(6, Tone.MonoSynth, {
 }
 }).toMaster();
 const notes = ["C3", "E3", "G3", "A3", "C4", "D4", "E4", "G4", "A4", "C5"];
+// C Major
+const redNotes = ["C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5"];
+// G Major
+const blueNotes = ["G3", "A3", "B3", "C4", "D4", "E4", "F#4", "G4", "A4", "B4", "C5", "D5", "E5", "F#5", "G5", "A5", "B5", "C6"];
+// D Major
+const orangeNotes = ["D3", "E3", "F#3", "G3", "A3", "B3", "C#4", "D4", "E4", "F#4", "G4", "A4", "B4", "C#5", "D5", "E5", "F#5", "G5"];
+// A Major
+const greenNotes = ["A3", "B3", "C#4", "D4", "E4", "F#4", "G#4", "A4", "B4", "C#5", "D5", "E5", "F#5", "G#5", "A5", "B5", "C#6", "D6"];
+// E Major
+const purpleNotes = ["E3", "F#3", "G#3", "A3", "B3", "C#4", "D#4", "E4", "F#4", "G#4", "A4", "B4", "C#5", "D#5", "E5", "F#5", "G#5", "A5"];
+// B Major
+const yellowNotes = ["B2", "C#3", "D#3", "E3", "F#3", "G#3", "A#3", "B3", "C#4", "D#4", "E4", "F#4", "G#4", "A#4", "B4", "C#5", "D#5", "E5"];
+
+
 
 function newGame() {
+  activatedColors = [];
+  updateColors();
+  if(sequence){
+    sequence.stop();
+    Tone.Transport.stop();
+  }
   let size = parseInt(document.getElementById("board-size").value);
   const board = getById("gameBoard");
   clear(board);
   createBoard(size);
-  const transposeBoard = gameBoard.transpose();
   sequence = new Tone.Sequence(function(time, col){
     for(let row = 0; row < n_rows; row++){
       if(gameBoard[row][col].activated){
         let className = gameBoard[row][col].element.className;
         gameBoard[row][col].element.className = className + " activated";
-        synth.triggerAttackRelease(notes.randomElement(), "4n");
+        let squareColor = gameBoard[row][col].color;
+        switch (squareColor) {
+          case "red":
+            synth.triggerAttackRelease(redNotes[n_rows - 1 - row], "4n");
+            break;
+          case "blue":
+            synth.triggerAttackRelease(blueNotes[n_rows - 1 - row], "4n");
+            break;
+          case "green":
+            synth.triggerAttackRelease(greenNotes[n_rows - 1 - row], "4n");
+            break;
+          case "purple":
+            synth.triggerAttackRelease(purpleNotes[n_rows - 1 - row], "4n");
+            break;
+          case "yellow":
+            synth.triggerAttackRelease(yellowNotes[n_rows - 1 - row], "4n");
+            break;
+          case "orange":
+            synth.triggerAttackRelease(orangeNotes[n_rows - 1 - row], "4n");
+            break;
+          default:
+            synth.triggerAttackRelease(notes.randomElement(), "4n");
+        }
         window.setTimeout(() => {
           gameBoard[row][col].element.className = className;
         }, 500);
       }
     }
   }, rangeArray(size), "4n");
+  sequence.start();
+  Tone.Transport.start();
+}
+
+function updateColors(){
+  const colors = document.getElementById("activeColors");
+  clear(colors);
+  activatedColors.forEach( (color) => {
+    colors.appendChild(document.createTextNode(color + " "));
+  });
 }
 
 function updateBoard() {
@@ -272,17 +316,11 @@ function activateColor(color) {
   const indexOfColor = activatedColors.indexOf(color);
   if(indexOfColor !== -1){
     activatedColors.splice(indexOfColor, 1);
-    if (activatedColors.length === 0){
-      Tone.Transport.stop();
-      sequence.stop();
-    }
   } else {
     activatedColors.push(color);
   }
   toggleSquares();
   updateColors();
-  Tone.Transport.start();
-  sequence.start();
 }
 
 function toggleSquares() {
@@ -298,11 +336,104 @@ function toggleSquares() {
 }
 
 
+function mosaic(){
+  const color1 = document.getElementById("mosaic-color-1").value;
+  const color2 = document.getElementById("mosaic-color-2").value;
+  if(!color1 || !color2){
+    return;
+  }
+  for (let row = 0; row < n_rows; row++) {
+    for (let col = 0; col < n_cols; col++) {
+      if(row % 2 === 0){
+        if(col % 2 === 0){
+          gameBoard[row][col].color = color1;
+          gameBoard[row][col].element.className = "square " + color1;
+        } else {
+          gameBoard[row][col].color = color2;
+          gameBoard[row][col].element.className = "square " + color2;
+        }
+      } else{
+        if(col % 2 === 0){
+          gameBoard[row][col].color = color2;
+          gameBoard[row][col].element.className = "square " + color2;
+        } else {
+          gameBoard[row][col].color = color1;
+          gameBoard[row][col].element.className = "square " + color1;
+        }
+      }
+    }
+  }
+}
+
+function scale(){
+  while(activatedColors.length > 0){
+    activatedColors.pop();
+  }
+  const color = document.getElementById("scale-color").value;
+  for (let row = 0; row < n_rows; row++){
+    for (let col = 0; col < n_cols; col++){
+        gameBoard[row][col].color = "gray";
+        gameBoard[row][col].element.className = "square gray";
+    }
+  }
+  let i = n_rows-1;
+  let j = 0;
+  while(i >= 0 && j < n_rows){
+    gameBoard[i][j].color = color;
+    gameBoard[i][j].element.className = "square " + color;
+    i--;
+    j++;
+  }
+  activateColor(color);
+}
+
+const letItBeNotes = [4, 4, 4, 4, 5, 2, 4, 4, 7, 8, 9, 9, 9, 8, 8, 7, 7, 9, 9, 10, 9, 9, 8, 9, 8, 7];
+
+function songFilter() {
+  const title = document.getElementById("songs").value.split("-")[0];
+  const color = document.getElementById("songs").value.split("-")[1];
+  switch(title){
+    case "let_it_be":
+      playSong(letItBeNotes, color);
+      break;
+    default:
+      break;
+  }
+}
+
+function playSong(notes, color){
+  const copiedNotes = notes.slice();
+  Tone.Transport.stop();
+  sequence.stop();
+  for (let row = 0; row < n_rows; row++){
+    for (let col = 0; col < n_cols; col++){
+      gameBoard[row][col].color = "gray";
+      gameBoard[row][col].element.className = "square gray";
+      gameBoard[row][col].activated = false;
+    }
+  }
+  for(let col = 0; col < n_cols; col ++){
+    if(copiedNotes.length > 0){
+      let rowNum = n_rows - 1 - copiedNotes.shift();
+      gameBoard[rowNum][col].color = color;
+      gameBoard[rowNum][col].activated = true;
+      gameBoard[rowNum][col].element.className = "square " + color;
+    }
+  }
+  Tone.Transport.start();
+  sequence.start();
+  if(copiedNotes.length > 0){
+    window.setTimeout(playSong.bind(null, copiedNotes, color), 8800);
+  }
+}
 
 
 document.addEventListener("DOMContentLoaded", function(){
   window.newGame = newGame;
   window.updateBoard = updateBoard;
   window.activateColor = activateColor;
-  updateBoard(14);
+  window.mosaic = mosaic;
+  window.scale = scale;
+  window.songFilter = songFilter;
+  updateBoard();
 });

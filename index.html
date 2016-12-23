@@ -19,18 +19,57 @@
       <option value="14" selected>14x14</option>
       <option value="16">16x16</option>
       <option value="18">18x18</option>
-      <option value="20">20x20</option>
     </select>
     <table id="gameBoard">
     </table>
     <div class"activate-colors">
       Toggle Colors:
-      <button onclick="activateColor('red')">Red</button>
-      <button onclick="activateColor('blue')">Blue</button>
-      <button onclick="activateColor('green')">Green</button>
-      <button onclick="activateColor('purple')">Purple</button>
-      <button onclick="activateColor('yellow')">Yellow</button>
-      <button onclick="activateColor('orange')">Orange</button>
+      <button onclick="activateColor('red')">Red / C Major</button>
+      <button onclick="activateColor('blue')">Blue / G Major</button>
+      <button onclick="activateColor('orange')">Orange / D Major</button>
+      <button onclick="activateColor('green')">Green / A Major</button>
+      <button onclick="activateColor('purple')">Purple / E Major</button>
+      <button onclick="activateColor('yellow')">Yellow / B Major</button>
+    </div>
+    <div class="board-shapes">
+      <span>First Color:</span>
+      <select id="mosaic-color-1">
+        <option value="red">red</option>
+        <option value="blue">blue</option>
+        <option value="orange">orange</option>
+        <option value="green">green</option>
+        <option value="purple">purple</option>
+        <option value="yellow">yellow</option>
+      </select>
+      <span>Second Color:</span>
+      <select id="mosaic-color-2">
+        <option value="red">red</option>
+        <option value="blue">blue</option>
+        <option value="orange">orange</option>
+        <option value="green">green</option>
+        <option value="purple">purple</option>
+        <option value="yellow">yellow</option>
+      </select>
+      <button onclick="mosaic()">Mosaic</button>
+    </div>
+    <div class="scale">
+      <span>Scale:</span>
+      <select id="scale-color">
+        <option value="red">red / c major</option>
+        <option value="blue">blue / g major</option>
+        <option value="orange">orange / d major</option>
+        <option value="green">green / a major</option>
+        <option value="purple">purple / e major</option>
+        <option value="yellow">yellow / b major</option>
+      </select>
+      <button onclick="scale()">Scale</button>
+    </div>
+    <div class='songs'>
+      <span>Songs:</span>
+      <select id="songs">
+        <option value="let_it_be-red">let it be</option>
+      </select>
+      <button onclick="songFilter()">Play Song</button>
     </div>
     <div>Moves:
       <span id="moves"></span>

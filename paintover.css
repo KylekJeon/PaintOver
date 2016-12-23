@@ -62,6 +62,10 @@
    background-color:rgba(255, 163, 6, .5);
  }
 
+.gray {
+  background-color: gray;
+}
+
 .aquamarine {
   background-color: aquamarine;
 }
