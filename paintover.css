@@ -1,3 +1,10 @@
+body {
+  background: #606c88; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #606c88 , #3f4c6b); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to left, #606c88 , #3f4c6b); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  color: white;
+}
+
 .square {
   width: 30px;
   height: 30px;
@@ -5,14 +12,184 @@
   cursor: pointer;
 }
 
+.board-background {
+  position: relative;
+  width: 615px;
+  margin: 0 auto;
+}
+
+#gameBoard {
+  margin-top: 50px;
+  background: white;
+  position: absolute;
+  left: 200px;
+}
+
+
+.game-title {
+  text-align: center;
+  font-family: "Courgette", "Pacifico", arial;
+}
+
+
+
 .start-button {
-  display: block;
+	-moz-box-shadow: 3px 4px 0px 0px #1564ad;
+	-webkit-box-shadow: 3px 4px 0px 0px #1564ad;
+	box-shadow: 3px 4px 0px 0px #1564ad;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5));
+	background:-moz-linear-gradient(top, #79bbff 5%, #378de5 100%);
+	background:-webkit-linear-gradient(top, #79bbff 5%, #378de5 100%);
+	background:-o-linear-gradient(top, #79bbff 5%, #378de5 100%);
+	background:-ms-linear-gradient(top, #79bbff 5%, #378de5 100%);
+	background:linear-gradient(to bottom, #79bbff 5%, #378de5 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#79bbff', endColorstr='#378de5',GradientType=0);
+	background-color:#79bbff;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	border:1px solid #337bc4;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:14px;
+	font-weight:bold;
+	padding:8px 35px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #528ecc;
+  position: absolute;
+  left: 200px;
+  outline: none;
+  top: 0;
+}
+
+.start-button:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff));
+	background:-moz-linear-gradient(top, #378de5 5%, #79bbff 100%);
+	background:-webkit-linear-gradient(top, #378de5 5%, #79bbff 100%);
+	background:-o-linear-gradient(top, #378de5 5%, #79bbff 100%);
+	background:-ms-linear-gradient(top, #378de5 5%, #79bbff 100%);
+	background:linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#378de5', endColorstr='#79bbff',GradientType=0);
+	background-color:#378de5;
+}
+
+.start-button:active {
+  top: 1px;
+}
+
+#board-size {
+  position: absolute;
+  right: -63px;
+  width: 100px;
+  height: 29px;
+  overflow: hidden;
+  background: #3b8ec2;
+  font-size: 14px;
+  color: white;
+  font-family: sans-serif;
+}
+
+.game-logic {
+  width: 440px;
+  position: absolute;
+  left: -220px;
+  font-size: 18px;
+}
+
+.toggle-button {
+  width: 130px;
+  height: 25px;
+  border-radius: 10px;
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  background: black;
+  outline: none;
+}
+
+.red-button {
+  color: red;
+}
+
+.blue-button {
+  color: blue;
+}
+
+.orange-button {
+  color: orange;
+}
+
+.green-button {
+  color: green;
+}
+
+.purple-button {
+  color: purple;
+}
+
+.yellow-button {
+  color: yellow;
+}
+
+
+.board-shapes {
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 
-.gameBoard {
-  margin-top: 30px;
+.mosaic-select {
+  width: 90px;
+  height: 20px;
+  overflow: hidden;
+  background: #3b8ec2;
+  font-size: 14px;
+  color: white;
+  font-family: sans-serif;
 }
+
+.mosaic-select-button {
+  width: 100px;
+  height: 25px;
+  margin-top: 10px;
+  border-radius: 10px;
+  background: #3b8ec2;
+  color: white;
+  font-size: 14px;
+}
+
+.move-container {
+  position: absolute;
+  left: 410px;
+  top: 10px;
+}
+
+.active-color-container {
+  margin-bottom: 15px;
+}
+
+
+#scale-color {
+  width: 150px;
+  height: 20px;
+  overflow: hidden;
+  background: #3b8ec2;
+  font-size: 14px;
+  color: white;
+  font-family: sans-serif;
+  margin-right: 20px;
+}
+
+.scale-button {
+  width: 100px;
+  height: 25px;
+  border-radius: 10px;
+  background: #3b8ec2;
+  color: white;
+  font-size: 14px;
+}
+
 
 .red {
    background-color: red;
