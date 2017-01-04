@@ -190,6 +190,33 @@ body {
   font-size: 14px;
 }
 
+.start-stop {
+  width: 160px;
+  height: 25px;
+  border-radius: 10px;
+  background: #3b8ec2;
+  color: white;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.music-playing-container {
+  margin-bottom: 10px;
+}
+
+.wacky-painter {
+  margin-top: 10px;
+}
+
+.wacky-button {
+  width: 160px;
+  height: 25px;
+  border-radius: 10px;
+  background: #3b8ec2;
+  color: white;
+  font-size: 14px;
+  margin-top: 15px;
+}
 
 .red {
    background-color: red;

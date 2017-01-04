@@ -7,6 +7,8 @@ const colors = "red blue green purple yellow orange".split(/\s+/);
 let activatedColors = [];
 let dominantColor;
 let secondColor;
+let playing = false;
+let painterMode = false;
 
 // DOM functions
 
@@ -187,17 +189,8 @@ function createBoard (size) {
   updateMoves(document.getElementById("maxMoves"), maxMoves);
 }
 
-function newGame() {
-  activatedColors = [];
-  updateColors();
-  if(sequence){
-    sequence.stop();
-    Tone.Transport.stop();
-  }
-  let size = parseInt(document.getElementById("board-size").value);
-  const board = getById("gameBoard");
-  clear(board);
-  createBoard(size);
+
+function createSequence (size, tempo = "4n") {
   sequence = new Tone.Sequence(function(time, col){
     for(let row = 0; row < n_rows; row++){
       if(gameBoard[row][col].activated){
@@ -206,34 +199,43 @@ function newGame() {
         let squareColor = gameBoard[row][col].color;
         switch (squareColor) {
           case "red":
-            synth.triggerAttackRelease(redNotes[n_rows - 1 - row], "4n");
+            synth.triggerAttackRelease(redNotes[n_rows - 1 - row], tempo);
             break;
           case "blue":
-            synth.triggerAttackRelease(blueNotes[n_rows - 1 - row], "4n");
+            synth.triggerAttackRelease(blueNotes[n_rows - 1 - row], tempo);
             break;
           case "green":
-            synth.triggerAttackRelease(greenNotes[n_rows - 1 - row], "4n");
+            synth.triggerAttackRelease(greenNotes[n_rows - 1 - row], tempo);
             break;
           case "purple":
-            synth.triggerAttackRelease(purpleNotes[n_rows - 1 - row], "4n");
+            synth.triggerAttackRelease(purpleNotes[n_rows - 1 - row], tempo);
             break;
           case "yellow":
-            synth.triggerAttackRelease(yellowNotes[n_rows - 1 - row], "4n");
+            synth.triggerAttackRelease(yellowNotes[n_rows - 1 - row], tempo);
             break;
           case "orange":
-            synth.triggerAttackRelease(orangeNotes[n_rows - 1 - row], "4n");
+            synth.triggerAttackRelease(orangeNotes[n_rows - 1 - row], tempo);
             break;
           default:
-            synth.triggerAttackRelease(notes.randomElement(), "4n");
+            synth.triggerAttackRelease(notes.randomElement(), tempo);
         }
         window.setTimeout(() => {
           gameBoard[row][col].element.className = className;
         }, 500);
       }
     }
-  }, rangeArray(size), "4n");
+  }, rangeArray(size), tempo);
+}
+
+function newGame() {
+  activatedColors = [];
+  updateColors();
+  let size = parseInt(document.getElementById("board-size").value);
+  const board = getById("gameBoard");
+  clear(board);
+  createBoard(size);
+  createSequence(size);
   sequence.start();
-  Tone.Transport.start();
 }
 
 function updateColors(){
@@ -271,6 +273,32 @@ function paintCallback(e) {
   countColors();
 }
 
+function countColors(){
+  const colorCount = {};
+  colors.forEach((color) => {
+    colorCount[color] = 0;
+  });
+  for (let row = 0; row < n_rows; row++){
+    for (let col = 0; col < n_cols; col++){
+      colorCount[gameBoard[row][col].color] += 1;
+    }
+  }
+  let mostColors = 0;
+  let secondMost = 0;
+  for (let prop in colorCount) {
+    if(colorCount[prop] > secondMost){
+      if(colorCount[prop] > mostColors){
+        mostColors = colorCount[prop];
+        dominantColor = prop;
+      } else {
+        secondMost = colorCount[prop];
+        secondColor = prop;
+      }
+    }
+  }
+  console.log("Most colors: " + dominantColor + ": " + mostColors);
+  console.log("Second most colors: " + secondColor + ": " + secondMost);
+}
 
 // Tone.js setup
 
@@ -312,9 +340,31 @@ function toggleSquares() {
 }
 
 
+function startStop () {
+  if (playing) {
+    Tone.Transport.stop();
+    playing = false;
+    updateOnOff();
+  } else {
+    Tone.Transport.start();
+    playing = true;
+    updateOnOff();
+  }
+}
+
+function updateOnOff(){
+  const onOff = document.getElementById("onOff");
+  clear(onOff);
+  if (playing){
+    onOff.appendChild(document.createTextNode(" On"));
+  } else {
+    onOff.appendChild(document.createTextNode(" Off"));
+  }
+}
+
 // Shape logic game
 
-function mosaic(){
+function mosaic (){
   const color1 = document.getElementById("mosaic-color-1").value;
   const color2 = document.getElementById("mosaic-color-2").value;
   if(!color1 || !color2){
@@ -348,11 +398,19 @@ function mosaic(){
 
 // Scales
 
-function scale(){
+function scaleContainer(){
+  if(playing){
+    startStop();
+  }
   while(activatedColors.length > 0){
     activatedColors.pop();
   }
   greyOut();
+  window.setTimeout(scale, 50);
+}
+
+function scale(){
+  const color = document.getElementById("scale-color").value;
   let i = n_rows-1;
   let j = 0;
   while(i >= 0 && j < n_rows){
@@ -362,91 +420,67 @@ function scale(){
     j++;
   }
   activateColor(color);
+  startStop();
 }
 
 
 // Helper Methods
 
 function greyOut() {
-  const color = document.getElementById("scale-color").value;
   for (let row = 0; row < n_rows; row++){
     for (let col = 0; col < n_cols; col++){
         gameBoard[row][col].color = "gray";
-        gameBoard[row][col].element.className = "square gray";
+        gameBoard[row][col].element.className = "square gray " + row + " " + col;
+        gameBoard[row][col].activated = false;
     }
   }
 }
 
+// Wacky Painter
 
-// Unfinished/Unused functions
+function wackyPainter() {
+  greyOut();
+  if(painterMode){
+    if(playing) {
+      startStop();
+      activatedColors = [];
+      updateColors();
+    }
+    $('#gameBoard').unbind("mouseenter");
+    painterMode = false;
+    painterModeToggle();
+    window.setTimeout(greyOut, 50);
+  } else{
+    randomColors();
+    painterMode = true;
+    painterModeToggle();
+  }
+}
 
-function countColors(){
-  const colorCount = {};
-  colors.forEach((color) => {
-    colorCount[color] = 0;
+function painterModeToggle() {
+  let paint = document.getElementById("painter-mode");
+  clear(paint);
+  if (painterMode){
+    paint.appendChild(document.createTextNode("On"));
+  } else {
+    paint.appendChild(document.createTextNode("Off"));
+  }
+}
+
+function randomColors() {
+  $('#gameBoard').on("mouseenter", ".square", e=> {
+    const $sq = $(e.currentTarget);
+    const className = $sq.attr("class").split(" ");
+    const row = className[2];
+    const col = className[3];
+    const color = randomColor();
+    $sq.removeClass();
+    let klass = "square " + color + " " + row + " " + col;
+    gameBoard[row][col].element.className = klass;
+    gameBoard[row][col].color = color;
+    toggleSquares();
   });
-  for (let row = 0; row < n_rows; row++){
-    for (let col = 0; col < n_cols; col++){
-      colorCount[gameBoard[row][col].color] += 1;
-    }
-  }
-  let mostColors = 0;
-  let secondMost = 0;
-  for (let prop in colorCount) {
-    if(colorCount[prop] > secondMost){
-      if(colorCount[prop] > mostColors){
-        mostColors = colorCount[prop];
-        dominantColor = prop;
-      } else {
-        secondMost = colorCount[prop];
-        secondColor = prop;
-      }
-    }
-  }
-  console.log("Most colors: " + dominantColor + ": " + mostColors);
-  console.log("Second most colors: " + secondColor + ": " + secondMost);
 }
-
-const letItBeNotes = [4, 4, 4, 4, 5, 2, 4, 4, 7, 8, 9, 9, 9, 8, 8, 7, 7, 9, 9, 10, 9, 9, 8, 9, 8, 7];
-
-function songFilter() {
-  const title = document.getElementById("songs").value.split("-")[0];
-  const color = document.getElementById("songs").value.split("-")[1];
-  switch(title){
-    case "let_it_be":
-      playSong(letItBeNotes, color);
-      break;
-    default:
-      break;
-  }
-}
-
-function playSong(notes, color){
-  const copiedNotes = notes.slice();
-  Tone.Transport.stop();
-  sequence.stop();
-  for (let row = 0; row < n_rows; row++){
-    for (let col = 0; col < n_cols; col++){
-      gameBoard[row][col].color = "gray";
-      gameBoard[row][col].element.className = "square gray";
-      gameBoard[row][col].activated = false;
-    }
-  }
-  for(let col = 0; col < n_cols; col ++){
-    if(copiedNotes.length > 0){
-      let rowNum = n_rows - 1 - copiedNotes.shift();
-      gameBoard[rowNum][col].color = color;
-      gameBoard[rowNum][col].activated = true;
-      gameBoard[rowNum][col].element.className = "square " + color;
-    }
-  }
-  Tone.Transport.start();
-  sequence.start();
-  if(copiedNotes.length > 0){
-    window.setTimeout(playSong.bind(null, copiedNotes, color), 8800);
-  }
-}
-
 
 // Start Game
 
@@ -455,7 +489,8 @@ document.addEventListener("DOMContentLoaded", function(){
   window.updateBoard = updateBoard;
   window.activateColor = activateColor;
   window.mosaic = mosaic;
-  window.scale = scale;
-  window.songFilter = songFilter;
+  window.scaleContainer = scaleContainer;
+  window.wackyPainter = wackyPainter;
+  window.startStop = startStop;
   updateBoard();
 });
