@@ -218,6 +218,59 @@ body {
   margin-top: 15px;
 }
 
+.instruction-section {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: none;
+  justify-content: center;
+  background: rgba(75, 75, 75, .8)
+}
+
+.instructions {
+  background: #999;
+  width: 80%;
+  height: 80%;
+  margin: auto;
+  padding: 20px;
+}
+
+.instruction-button {
+  width: 160px;
+  height: 25px;
+  border-radius: 10px;
+  background: #3b8ec2;
+  color: white;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.show {
+  display: flex;
+}
+
+.instructions-images {
+  width: 100px;
+  height: 100px;
+}
+
+.painter {
+  margin-top: 10px;
+}
+
+.painter-button {
+  width: 160px;
+  height: 25px;
+  border-radius: 10px;
+  background: #3b8ec2;
+  color: white;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+
 .red {
    background-color: red;
  }

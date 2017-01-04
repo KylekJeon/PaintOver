@@ -8,8 +8,8 @@ let activatedColors = [];
 let dominantColor;
 let secondColor;
 let playing = false;
-let painterMode = false;
-
+let wackyPainterMode = false;
+let visible = false;
 // DOM functions
 
 function createNode (type, parent) {
@@ -296,8 +296,6 @@ function countColors(){
       }
     }
   }
-  console.log("Most colors: " + dominantColor + ": " + mostColors);
-  console.log("Second most colors: " + secondColor + ": " + secondMost);
 }
 
 // Tone.js setup
@@ -440,27 +438,27 @@ function greyOut() {
 
 function wackyPainter() {
   greyOut();
-  if(painterMode){
+  if(wackyPainterMode){
     if(playing) {
       startStop();
       activatedColors = [];
       updateColors();
     }
     $('#gameBoard').unbind("mouseenter");
-    painterMode = false;
-    painterModeToggle();
+    wackyPainterMode = false;
+    wackyPainterModeToggle();
     window.setTimeout(greyOut, 500);
   } else{
     randomColors();
-    painterMode = true;
-    painterModeToggle();
+    wackyPainterMode = true;
+    wackyPainterModeToggle();
   }
 }
 
-function painterModeToggle() {
-  let paint = document.getElementById("painter-mode");
+function wackyPainterModeToggle() {
+  let paint = document.getElementById("wacky-painter-mode");
   clear(paint);
-  if (painterMode){
+  if (wackyPainterMode){
     paint.appendChild(document.createTextNode("On"));
   } else {
     paint.appendChild(document.createTextNode("Off"));
@@ -482,7 +480,26 @@ function randomColors() {
   });
 }
 
+// instructions
+
+function openInstructions () {
+  $('.instruction-section').addClass("show");
+}
+
+function closeInstructions () {
+  $('.instruction-section').removeClass("show");
+}
+
+
 // Start Game
+
+$(document).keyup(function(e) {
+  if(e.keyCode === 27){
+    closeInstructions();
+  }
+});
+
+
 
 document.addEventListener("DOMContentLoaded", function(){
   window.newGame = newGame;
@@ -492,5 +509,9 @@ document.addEventListener("DOMContentLoaded", function(){
   window.scaleContainer = scaleContainer;
   window.wackyPainter = wackyPainter;
   window.startStop = startStop;
+  window.openInstructions = openInstructions;
+  $('.instruction-section').on("click", e => {
+    closeInstructions();
+  });
   updateBoard();
 });

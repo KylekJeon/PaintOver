@@ -39,10 +39,50 @@
         <span id="maxMoves"></span>
       </div>
       <section class="game-logic">
-        <button class="start-stop" onclick="startStop()">Start / Stop Music</button>
+        <button class="instruction-button" onclick="openInstructions()">Instructions</button>
+        <section class="instruction-section">
+          <div class="instructions">
+            <strong>Welcome to PaintOver, a colorful, musical game for all to enjoy!</strong>
+            <ol>
+              <strong>The Game</strong>
+              <li>
+                <img src="img/instructions-1.png" class="instructions-images">
+                The game "starts" with the upper-left square. The (orange) square is considered "activated"
+              </li>
+              <li>
+                <img src="img/instructions-2.png" class="instructions-images">
+                The image is the result of clicking on a red square.
+                Whenever you click on a square, two things happen. First, any activated squares change to the color of the square you clicked. Second, any squares that are the same color of the square you clicked will become activated as well, if they are adjacent to an activated square. All three red squares at the top left are now "activated"
+              </li>
+              <li>
+                <img src="img/instructions-3.png" class="instructions-images">
+                The image is the result of clicking on a yellow square.
+                Same as above, the yellow squares that were adjacent to the "activated" red squares are activated, and the red squares are now yellow.
+              </li>
+              <li>
+                <img src="img/instructions-4.png" class="instructions-images">
+                The image is the result of clicking on a purple square.
+                Notice there were three non-adjacent purple squares touching the yellow "activated" squares in instruction 3, all three of which are now activated and part of the activated squares.
+              </li>
+              <li>
+                And that's it! You keep clicking on squares of different colors until the entire board becomes a single color. Keep in mind that there are only a certain number of moves allowed per game.
+              </li>
+            </ol>
+            <strong>The Music</strong>
+            The board serves as a musical step-sequencer. Going from left to right, each column will play a sound based on the row (lower row = lower note).
+            <ul>
+              <li>Click the Start / Stop Music to begin the sequencer</li>
+              <li>Press the toggle color buttons to "activate" the color. Any squares with activated colors will play a note </li>
+              <li>The mosaic will create a mosaic board of two colors</li>
+              <li>The scale button will create a scale of whatever color you choose. The colors correspond to a major scale.</li>
+              <li>The WackyPainter button blanks out the board. When you mouse over a square, it will change the square to a random color. The audio-sequencer will work with the WackyPainter, so give it a whirl!</li>
+            </ul>
+          </div>
+        </section>
         <div class="music-playing-container">Music:
           <span id="onOff">Off</span>
         </div>
+        <button class="start-stop" onclick="startStop()">Start / Stop Music</button>
         <div class="active-color-container">Active Colors:
           <span id="activeColors"></span>
         </div>
@@ -89,9 +129,14 @@
           <button class="scale-button" onclick="scaleContainer()">Scale</button>
         </div>
         <div class="wacky-painter">
-          WackyPainter Mode: 
-          <span id="painter-mode">Off</span><br>
+          WackyPainter Mode:
+          <span id="wacky-painter-mode">Off</span><br>
           <button class="wacky-button" onclick="wackyPainter()">WackyPainter</button>
+        </div>
+        <div class="painter">
+          Painter Mode:
+          <span id="painter-mode">Off</span><br>
+          <button class="painter-button" onclick="painter()">Painter</button>
         </div>
       </section>
     </div>

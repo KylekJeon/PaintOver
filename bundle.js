@@ -61,8 +61,8 @@
 	var dominantColor = void 0;
 	var secondColor = void 0;
 	var playing = false;
-	var painterMode = false;
-	
+	var wackyPainterMode = false;
+	var visible = false;
 	// DOM functions
 	
 	function createNode(type, parent) {
@@ -344,8 +344,6 @@
 	      }
 	    }
 	  }
-	  console.log("Most colors: " + dominantColor + ": " + mostColors);
-	  console.log("Second most colors: " + secondColor + ": " + secondMost);
 	}
 	
 	// Tone.js setup
@@ -452,7 +450,7 @@
 	    activatedColors.pop();
 	  }
 	  greyOut();
-	  window.setTimeout(scale, 50);
+	  window.setTimeout(scale, 500);
 	}
 	
 	function scale() {
@@ -485,27 +483,27 @@
 	
 	function wackyPainter() {
 	  greyOut();
-	  if (painterMode) {
+	  if (wackyPainterMode) {
 	    if (playing) {
 	      startStop();
 	      activatedColors = [];
 	      updateColors();
 	    }
 	    $('#gameBoard').unbind("mouseenter");
-	    painterMode = false;
-	    painterModeToggle();
-	    window.setTimeout(greyOut, 50);
+	    wackyPainterMode = false;
+	    wackyPainterModeToggle();
+	    window.setTimeout(greyOut, 500);
 	  } else {
 	    randomColors();
-	    painterMode = true;
-	    painterModeToggle();
+	    wackyPainterMode = true;
+	    wackyPainterModeToggle();
 	  }
 	}
 	
-	function painterModeToggle() {
-	  var paint = document.getElementById("painter-mode");
+	function wackyPainterModeToggle() {
+	  var paint = document.getElementById("wacky-painter-mode");
 	  clear(paint);
-	  if (painterMode) {
+	  if (wackyPainterMode) {
 	    paint.appendChild(document.createTextNode("On"));
 	  } else {
 	    paint.appendChild(document.createTextNode("Off"));
@@ -527,7 +525,23 @@
 	  });
 	}
 	
+	// instructions
+	
+	function openInstructions() {
+	  $('.instruction-section').addClass("show");
+	}
+	
+	function closeInstructions() {
+	  $('.instruction-section').removeClass("show");
+	}
+	
 	// Start Game
+	
+	$(document).keyup(function (e) {
+	  if (e.keyCode === 27) {
+	    closeInstructions();
+	  }
+	});
 	
 	document.addEventListener("DOMContentLoaded", function () {
 	  window.newGame = newGame;
@@ -537,6 +551,10 @@
 	  window.scaleContainer = scaleContainer;
 	  window.wackyPainter = wackyPainter;
 	  window.startStop = startStop;
+	  window.openInstructions = openInstructions;
+	  $('.instruction-section').on("click", function (e) {
+	    closeInstructions();
+	  });
 	  updateBoard();
 	});
 
