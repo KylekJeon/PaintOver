@@ -406,7 +406,7 @@ function scaleContainer(){
     activatedColors.pop();
   }
   greyOut();
-  window.setTimeout(scale, 50);
+  window.setTimeout(scale, 500);
 }
 
 function scale(){
@@ -449,7 +449,7 @@ function wackyPainter() {
     $('#gameBoard').unbind("mouseenter");
     painterMode = false;
     painterModeToggle();
-    window.setTimeout(greyOut, 50);
+    window.setTimeout(greyOut, 500);
   } else{
     randomColors();
     painterMode = true;
