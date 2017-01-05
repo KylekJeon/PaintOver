@@ -226,7 +226,8 @@ body {
   right: 0;
   display: none;
   justify-content: center;
-  background: rgba(75, 75, 75, .8)
+  background: rgba(75, 75, 75, .8);
+  font-size: 14px;
 }
 
 .instructions {
@@ -234,7 +235,7 @@ body {
   width: 80%;
   height: 80%;
   margin: auto;
-  padding: 20px;
+  padding: 10px;
 }
 
 .instruction-button {
@@ -252,8 +253,8 @@ body {
 }
 
 .instructions-images {
-  width: 100px;
-  height: 100px;
+  width: 50px;
+  height: 50px;
 }
 
 .painter {
@@ -269,6 +270,46 @@ body {
   font-size: 14px;
   margin-top: 10px;
 }
+
+.game-logic {
+  position: relative;
+}
+
+.nav-links-section {
+  position: absolute;
+  top: -30px;
+  right: -700px;
+  font-size: 14px;
+}
+
+.nav-links {
+  text-decoration: none;
+  color: white;
+}
+
+.nav-links:hover {
+  color: blue;
+}
+
+.nav-links:active {
+  color: #01004C;
+}
+
+.nav-image {
+  width: 30px;
+  height: 30px;
+}
+
+#painter-color {
+  width: 90px;
+  height: 20px;
+  overflow: hidden;
+  background: #3b8ec2;
+  font-size: 14px;
+  color: white;
+  font-family: sans-serif;
+}
+
 
 
 .red {

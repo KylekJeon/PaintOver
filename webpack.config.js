@@ -1,7 +1,7 @@
 module.exports = {
-  entry: "./paintover.js",
+  entry: "./lib/paintover.js",
   output: {
-    filename: "./bundle.js",
+    filename: "./lib/bundle.js",
   },
   module: {
     loaders: [

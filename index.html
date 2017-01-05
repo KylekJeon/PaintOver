@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <title>Paint Over</title>
-    <link rel="stylesheet" type="text/css" href="./paintover.css">
+    <link rel="stylesheet" type="text/css" href="./assets/paintover.css">
     <link href="https://fonts.googleapis.com/css?family=Courgette|Pacifico" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="./bundle.js"></script>
+    <script src="./lib/bundle.js"></script>
   </head>
 
   <body>
@@ -31,14 +31,35 @@
         <option value="16">16x16</option>
         <option value="18">18x18</option>
       </select>
-      <table id="gameBoard">
-      </table>
+      <div class="gameBoard-container">
+        <table id="gameBoard">
+        </table>
+      </div>
       <div class="move-container">Moves:
         <span id="moves"></span>
         /
         <span id="maxMoves"></span>
       </div>
       <section class="game-logic">
+        <div class="nav-links-section">
+          <span>Created by: Kyle Jeon</span>
+          <br>
+          <span>Email: kylekjeon@gmail.com</span>
+          <br>
+          <br>
+          <a href="www.kylejeon.com" class="nav-links"><div class="nav-link-item">
+            <img src="img/personal.png" class="nav-image">
+            Personal
+          </div></a>
+          <a href="www.linkedin.com/in/kyle-jeon-702678126" class="nav-links"><div class="nav-link-item">
+            <img src="img/linked.png" class="nav-image">
+            LinkedIn
+          </div></a>
+          <a href="https://github.com/kylekjeon" class="nav-links"><div class="nav-link-item" href="">
+            <img src="img/github.png" class="nav-image">
+            Github
+          </div></a>
+        </div>
         <button class="instruction-button" onclick="openInstructions()">Instructions</button>
         <section class="instruction-section">
           <div class="instructions">
@@ -135,7 +156,19 @@
         </div>
         <div class="painter">
           Painter Mode:
-          <span id="painter-mode">Off</span><br>
+          <span id="painter-mode">Off</span>
+          &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+          Paint Color:
+          <span id="painter-color-display" value="red"></span>
+          <select onchange="updatePainterColor()" class="painter-select" id="painter-color">
+            <option value="red">red</option>
+            <option value="blue">blue</option>
+            <option value="orange">orange</option>
+            <option value="green">green</option>
+            <option value="purple">purple</option>
+            <option value="yellow">yellow</option>
+          </select>
+          <br>
           <button class="painter-button" onclick="painter()">Painter</button>
         </div>
       </section>
