@@ -92,21 +92,16 @@
             <strong>The Music</strong>
             The board serves as a musical step-sequencer. Going from left to right, each column will play a sound based on the row (lower row = lower note).
             <ul>
-              <li>Click the Start / Stop Music to begin the sequencer</li>
+              <li>Click the Music to begin the sequencer</li>
               <li>Press the toggle color buttons to "activate" the color. Any squares with activated colors will play a note </li>
-              <li>The mosaic will create a mosaic board of two colors</li>
               <li>The scale button will create a scale of whatever color you choose. The colors correspond to a major scale.</li>
+              <li>The Painter button will blank out the board. When you click on a button, it will fill the square with the chosen paint color.</li>
               <li>The WackyPainter button blanks out the board. When you mouse over a square, it will change the square to a random color. The audio-sequencer will work with the WackyPainter, so give it a whirl!</li>
             </ul>
           </div>
         </section>
-        <div class="music-playing-container">Music:
-          <span id="onOff">Off</span>
-        </div>
-        <button class="start-stop" onclick="startStop()">Start / Stop Music</button>
-        <div class="active-color-container">Active Colors:
-          <span id="activeColors"></span>
-        </div>
+        <br/>
+        <button class="start-stop" onclick="startStop()">Music</button>
         <div class"activate-colors">
           Toggle Colors<br>
           <button class="red-button toggle-button" onclick="activateColor('red')">Red / C Major</button>
@@ -128,15 +123,7 @@
           </select>
           <button class="scale-button" onclick="scaleContainer()">Scale</button>
         </div>
-        <div class="wacky-painter">
-          WackyPainter Mode:
-          <span id="wacky-painter-mode">Off</span><br>
-          <button class="wacky-button" onclick="wackyPainter()">WackyPainter</button>
-        </div>
         <div class="painter">
-          Painter Mode:
-          <span id="painter-mode">Off</span>
-          &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
           Paint Color:
           <span id="painter-color-display" value="red"></span>
           <select onchange="updatePainterColor()" class="painter-select" id="painter-color">
@@ -147,8 +134,11 @@
             <option value="purple">purple</option>
             <option value="yellow">yellow</option>
           </select>
-          <br>
+          &nbsp&nbsp&nbsp
           <button class="painter-button" onclick="painter()">Painter</button>
+        </div>
+        <div class="wacky-painter">
+          <button class="wacky-button" onclick="wackyPainter()">WackyPainter</button>
         </div>
       </section>
     </div>
