@@ -6,6 +6,9 @@ body {
   min-height: 700px;
 }
 
+button {
+  cursor: pointer;
+}
 .square {
   width: 30px;
   height: 30px;
