@@ -34,6 +34,8 @@
       <div class="gameBoard-container">
         <table id="gameBoard">
         </table>
+        <button class="loser-button" onclick="restartGame()">You've lost. Play Again?</button>
+        <button class="winner-button" onClick="restartGame()">You've won! Play Again?</button>
       </div>
       <div class="move-container">Moves:
         <span id="moves"></span>
@@ -64,39 +66,25 @@
         <section class="instruction-section">
           <div class="instructions">
             <strong>Welcome to PaintOver, a colorful, musical game for all to enjoy!</strong>
-            <ol>
-              <strong>The Game</strong>
-              <li>
-                <img src="img/instructions-1.png" class="instructions-images">
-                The game "starts" with the upper-left square. The (orange) square is considered "activated"
-              </li>
-              <li>
-                <img src="img/instructions-2.png" class="instructions-images">
-                The image is the result of clicking on a red square.
-                Whenever you click on a square, two things happen. First, any activated squares change to the color of the square you clicked. Second, any squares that are the same color of the square you clicked will become activated as well, if they are adjacent to an activated square. All three red squares at the top left are now "activated"
-              </li>
-              <li>
-                <img src="img/instructions-3.png" class="instructions-images">
-                The image is the result of clicking on a yellow square.
-                Same as above, the yellow squares that were adjacent to the "activated" red squares are activated, and the red squares are now yellow.
-              </li>
-              <li>
-                <img src="img/instructions-4.png" class="instructions-images">
-                The image is the result of clicking on a purple square.
-                Notice there were three non-adjacent purple squares touching the yellow "activated" squares in instruction 3, all three of which are now activated and part of the activated squares.
-              </li>
-              <li>
-                And that's it! You keep clicking on squares of different colors until the entire board becomes a single color. Keep in mind that there are only a certain number of moves allowed per game.
-              </li>
-            </ol>
+            <br/><br/>
+            <strong>The Game</strong>
+            <br/><br/>
+              The objective of the game is to flood the whole board into a single color
+
+              <ol>
+                <li>The top-left square is "flooded"</li>
+                <li>Select any square on the board, and all "flooded" squares will change to that color</li>
+                <li>Any squares adjacent to a "flooded" square will become flooded if it matches the color you chose</li>
+              </ol>
+              <br/>
             <strong>The Music</strong>
-            The board serves as a musical step-sequencer. Going from left to right, each column will play a sound based on the row (lower row = lower note).
+            <br/><br/>
+            The controls to the left of the board adds music to the game
             <ul>
-              <li>Click the Music to begin the sequencer</li>
-              <li>Press the toggle color buttons to "activate" the color. Any squares with activated colors will play a note </li>
-              <li>The scale button will create a scale of whatever color you choose. The colors correspond to a major scale.</li>
-              <li>The Painter button will blank out the board. When you click on a button, it will fill the square with the chosen paint color.</li>
-              <li>The WackyPainter button blanks out the board. When you mouse over a square, it will change the square to a random color. The audio-sequencer will work with the WackyPainter, so give it a whirl!</li>
+              <li>Click the Music button to begin the sequencer</li>
+              <li>Press the toggle color buttons to "activate" the color</li>
+              <li>The Painter button will let you color any square with the selected color</li>
+              <li>The WackyPainter button will fill in a random color for every square you mouse over</li>
             </ul>
           </div>
         </section>
